@@ -50,7 +50,7 @@ func (a Application) AllTaks(ctx context.Context) ([]domain.Task,error) {
 	return allTask, nil
 }
 
-func (a *Application) CreateTask(ctx context.Context, newTask CreateTask) error {
+func (a Application) CreateTask(ctx context.Context, newTask CreateTask) error {
 	if newTask.Title == "" {
 		return domain.ErrEmptyTitle
 	}
@@ -65,7 +65,7 @@ func (a *Application) CreateTask(ctx context.Context, newTask CreateTask) error 
 	return nil
 }
 
-func (a *Application) TaskDone(ctx context.Context, done TaskDone) error {
+func (a Application) TaskDone(ctx context.Context, done TaskDone) error {
 	task, err := a.tasks.FindByID(ctx, done.ID) 
 	if err != nil {
 		return err
@@ -84,7 +84,7 @@ func (a *Application) TaskDone(ctx context.Context, done TaskDone) error {
 	return nil
 }
 
-func (a *Application) TaskInprogress(ctx context.Context, inProgress TaskInProgress) error {
+func (a Application) TaskInprogress(ctx context.Context, inProgress TaskInProgress) error {
 	task, err := a.tasks.FindByID(ctx, inProgress.ID) 
 	if err != nil {
 		return err
