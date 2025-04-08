@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package taskpb;
+
+import "taskpb/messages.proto";
+
+service TaskService {
+	rpc GetAllTask(GetAllTaskRequest) returns(GetAllTaskResponse){};
+}
+
+message GetAllTaskRequest {}
+
+message GetAllTaskResponse {
+	repeated Task tasks = 1;
+}
