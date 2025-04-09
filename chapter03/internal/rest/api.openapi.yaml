@@ -1,0 +1,15 @@
+openapiOptions:
+  file:
+    - file: "taskpb/messages.proto"
+      option:
+        info:
+          title: Tasks
+          version: "1.0.0"
+        basePath: /
+  method:
+    - method: taskpb.TaskService.GetAllTask
+      option:
+        operationId: getAllTask
+        tags:
+          - Task
+        summary: Get All Tasks
