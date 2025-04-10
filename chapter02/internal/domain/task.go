@@ -4,7 +4,7 @@ type TaskStatus string
 
 const (
 	TaskIsInProgress = TaskStatus("INPROGRESS")
-	TaskIsDone       = TaskStatus("UNDONE")
+	TaskIsDone       = TaskStatus("DONE")
 )
 
 func (t TaskStatus) String() string {
