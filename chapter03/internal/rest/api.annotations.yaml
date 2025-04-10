@@ -4,3 +4,12 @@ http:
   rules:
     - selector: taskpb.TaskService.GetAllTask
       get: /api/tasks
+    - selector: taskpb.TaskService.CreateTask
+      post: /api/tasks
+      body: "*"
+    - selector: taskpb.TaskService.TaskDone
+      put: /api/tasks/{id}/done
+      body: "*"
+    - selector: taskpb.TaskService.TaskInProgress
+      put: /api/tasks/{id}/inprogress
+      body: "*"

@@ -13,3 +13,21 @@ openapiOptions:
         tags:
           - Task
         summary: Get All Tasks
+    - method: taskpb.TaskService.CreateTask
+      option:
+        operationId: createTask
+        tags:
+        - Task
+        summary: Create new Task
+    - method: taskpb.TaskService.TaskDone
+      option:
+        operationId: taskDone
+        tags:
+          - Task
+        summary: Mark task as done
+    - method: taskpb.TaskService.TaskInProgress
+      option:
+        operationId: taskInProgress
+        tags:
+        - Task
+        summary: Mark task as in progress

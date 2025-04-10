@@ -23,9 +23,9 @@ type (
 
 	App interface {
 		AllTaks(ctx context.Context) ([]domain.Task,error)
-		CreateTask(ctx context.Context, newTask CreateTask) error
-		TaskDone(ctx context.Context, done TaskDone) error
-		TaskInprogress(ctx context.Context, inProgress TaskInProgress) error
+		CreateTask(ctx context.Context, newTask CreateTask) (domain.Task, error)
+		TaskDone(ctx context.Context, done TaskDone) (domain.Task, error)
+		TaskInprogress(ctx context.Context, inProgress TaskInProgress) (domain.Task, error)
 	}
 
 	Application struct {
@@ -56,25 +56,25 @@ func (a Application) AllTaks(ctx context.Context) ([]domain.Task,error) {
 	return allTask, nil
 }
 
-func (a Application) CreateTask(ctx context.Context, newTask CreateTask) error {
+func (a Application) CreateTask(ctx context.Context, newTask CreateTask) (domain.Task, error) {
 	if newTask.Title == "" {
-		return domain.ErrEmptyTitle
+		return domain.Task{}, domain.ErrEmptyTitle
 	}
 
 	task := domain.NewTask(newTask.ID, newTask.Title, newTask.Description)
 	taskModel := taskDomainToModel(&task)
 
 	if err := a.tasks.Insert(ctx, &taskModel); err != nil {
-		return err
+		return domain.Task{}, err
 	}
 
-	return nil
+	return task, nil
 }
 
-func (a Application) TaskDone(ctx context.Context, done TaskDone) error {
+func (a Application) TaskDone(ctx context.Context, done TaskDone) (domain.Task, error) {
 	task, err := a.tasks.FindByID(ctx, done.ID) 
 	if err != nil {
-		return err
+		return domain.Task{}, err
 	}
 
 	taskDomain := taskModelToDomain(task)
@@ -84,16 +84,16 @@ func (a Application) TaskDone(ctx context.Context, done TaskDone) error {
 
 	err = a.tasks.Update(ctx, &updatedTask)
 	if err != nil {
-		return err
+		return domain.Task{}, err
 	}
 
-	return nil
+	return taskDomain, nil
 }
 
-func (a Application) TaskInprogress(ctx context.Context, inProgress TaskInProgress) error {
+func (a Application) TaskInprogress(ctx context.Context, inProgress TaskInProgress) (domain.Task, error) {
 	task, err := a.tasks.FindByID(ctx, inProgress.ID) 
 	if err != nil {
-		return err
+		return domain.Task{}, err
 	}
 
 	taskDomain := taskModelToDomain(task)
@@ -103,9 +103,9 @@ func (a Application) TaskInprogress(ctx context.Context, inProgress TaskInProgre
 
 	err = a.tasks.Update(ctx, &updatedTask)
 	if err != nil {
-		return err
+		return domain.Task{}, err
 	}
 
-	return nil
+	return taskDomain, nil
 }
 

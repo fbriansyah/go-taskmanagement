@@ -23,6 +23,9 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TaskServiceClient interface {
 	GetAllTask(ctx context.Context, in *GetAllTaskRequest, opts ...grpc.CallOption) (*GetAllTaskResponse, error)
+	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
+	TaskDone(ctx context.Context, in *TaskDoneRequest, opts ...grpc.CallOption) (*TaskDoneResponse, error)
+	TaskInProgress(ctx context.Context, in *TaskInProgressRequest, opts ...grpc.CallOption) (*TaskInProgressResponse, error)
 }
 
 type taskServiceClient struct {
@@ -42,11 +45,41 @@ func (c *taskServiceClient) GetAllTask(ctx context.Context, in *GetAllTaskReques
 	return out, nil
 }
 
+func (c *taskServiceClient) CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error) {
+	out := new(CreateTaskResponse)
+	err := c.cc.Invoke(ctx, "/taskpb.TaskService/CreateTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) TaskDone(ctx context.Context, in *TaskDoneRequest, opts ...grpc.CallOption) (*TaskDoneResponse, error) {
+	out := new(TaskDoneResponse)
+	err := c.cc.Invoke(ctx, "/taskpb.TaskService/TaskDone", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) TaskInProgress(ctx context.Context, in *TaskInProgressRequest, opts ...grpc.CallOption) (*TaskInProgressResponse, error) {
+	out := new(TaskInProgressResponse)
+	err := c.cc.Invoke(ctx, "/taskpb.TaskService/TaskInProgress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskServiceServer is the server API for TaskService service.
 // All implementations must embed UnimplementedTaskServiceServer
 // for forward compatibility
 type TaskServiceServer interface {
 	GetAllTask(context.Context, *GetAllTaskRequest) (*GetAllTaskResponse, error)
+	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
+	TaskDone(context.Context, *TaskDoneRequest) (*TaskDoneResponse, error)
+	TaskInProgress(context.Context, *TaskInProgressRequest) (*TaskInProgressResponse, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
 
@@ -56,6 +89,15 @@ type UnimplementedTaskServiceServer struct {
 
 func (UnimplementedTaskServiceServer) GetAllTask(context.Context, *GetAllTaskRequest) (*GetAllTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllTask not implemented")
+}
+func (UnimplementedTaskServiceServer) CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
+}
+func (UnimplementedTaskServiceServer) TaskDone(context.Context, *TaskDoneRequest) (*TaskDoneResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TaskDone not implemented")
+}
+func (UnimplementedTaskServiceServer) TaskInProgress(context.Context, *TaskInProgressRequest) (*TaskInProgressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TaskInProgress not implemented")
 }
 func (UnimplementedTaskServiceServer) mustEmbedUnimplementedTaskServiceServer() {}
 
@@ -88,6 +130,60 @@ func _TaskService_GetAllTask_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskService_CreateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).CreateTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/taskpb.TaskService/CreateTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).CreateTask(ctx, req.(*CreateTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_TaskDone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskDoneRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).TaskDone(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/taskpb.TaskService/TaskDone",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).TaskDone(ctx, req.(*TaskDoneRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_TaskInProgress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskInProgressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).TaskInProgress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/taskpb.TaskService/TaskInProgress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).TaskInProgress(ctx, req.(*TaskInProgressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskService_ServiceDesc is the grpc.ServiceDesc for TaskService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +194,18 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllTask",
 			Handler:    _TaskService_GetAllTask_Handler,
+		},
+		{
+			MethodName: "CreateTask",
+			Handler:    _TaskService_CreateTask_Handler,
+		},
+		{
+			MethodName: "TaskDone",
+			Handler:    _TaskService_TaskDone_Handler,
+		},
+		{
+			MethodName: "TaskInProgress",
+			Handler:    _TaskService_TaskInProgress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -38,6 +38,115 @@
         "tags": [
           "Task"
         ]
+      },
+      "post": {
+        "summary": "Create new Task",
+        "operationId": "createTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/taskpbCreateTaskResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/taskpbCreateTaskRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Task"
+        ]
+      }
+    },
+    "/api/tasks/{id}/done": {
+      "put": {
+        "summary": "Mark task as done",
+        "operationId": "taskDone",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/taskpbTaskDoneResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "tags": [
+          "Task"
+        ]
+      }
+    },
+    "/api/tasks/{id}/inprogress": {
+      "put": {
+        "summary": "Mark task as in progress",
+        "operationId": "taskInProgress",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/taskpbTaskInProgressResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "tags": [
+          "Task"
+        ]
       }
     }
   },
@@ -69,6 +178,25 @@
         }
       }
     },
+    "taskpbCreateTaskRequest": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "taskpbCreateTaskResponse": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/definitions/taskpbTask"
+        }
+      }
+    },
     "taskpbGetAllTaskResponse": {
       "type": "object",
       "properties": {
@@ -94,6 +222,22 @@
         },
         "status": {
           "type": "string"
+        }
+      }
+    },
+    "taskpbTaskDoneResponse": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/definitions/taskpbTask"
+        }
+      }
+    },
+    "taskpbTaskInProgressResponse": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/definitions/taskpbTask"
         }
       }
     }

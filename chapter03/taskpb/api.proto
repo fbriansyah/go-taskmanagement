@@ -6,10 +6,38 @@ import "taskpb/messages.proto";
 
 service TaskService {
 	rpc GetAllTask(GetAllTaskRequest) returns(GetAllTaskResponse){};
+	rpc CreateTask(CreateTaskRequest) returns(CreateTaskResponse){};
+	rpc TaskDone(TaskDoneRequest) returns(TaskDoneResponse){};
+	rpc TaskInProgress(TaskInProgressRequest) returns(TaskInProgressResponse){};
 }
 
 message GetAllTaskRequest {}
 
 message GetAllTaskResponse {
 	repeated Task tasks = 1;
+}
+
+message CreateTaskRequest {
+	string title = 1;
+	string description = 2;
+}
+
+message CreateTaskResponse {
+	Task task = 1;
+}
+
+message TaskDoneRequest {
+	string id = 1;
+}
+
+message TaskDoneResponse {
+	Task task = 1;
+}
+
+message TaskInProgressRequest {
+	string id = 1;
+}
+
+message TaskInProgressResponse {
+	Task task = 1;
 }

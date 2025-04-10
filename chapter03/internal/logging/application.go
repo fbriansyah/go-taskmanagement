@@ -2,6 +2,7 @@ package logging
 
 import (
 	"context"
+	"fmt"
 	"taksmanagement/internal/application"
 	"taksmanagement/internal/domain"
 
@@ -29,19 +30,19 @@ func (a Application) AllTaks(ctx context.Context) (tasks []domain.Task, err erro
 	return a.App.AllTaks(ctx)
 }
 
-func (a Application) CreateTask(ctx context.Context, newTask application.CreateTask) (err error) {
+func (a Application) CreateTask(ctx context.Context, newTask application.CreateTask) (task domain.Task, err error) {
 	a.logger.Info().Msg("--> Tasks.CreateTask")
 	defer func() { a.logger.Info().Err(err).Msg("<-- Tasks.CreateTask") }()
 	return a.App.CreateTask(ctx, newTask)
 }
 
-func (a Application) TaskDone(ctx context.Context, done application.TaskDone) (err error) {
-	a.logger.Info().Msg("--> Tasks.TaskDone")
+func (a Application) TaskDone(ctx context.Context, done application.TaskDone) (task domain.Task, err error) {
+	a.logger.Info().Msg(fmt.Sprintf("--> Tasks.TaskDone: %s", done.ID))
 	defer func() { a.logger.Info().Err(err).Msg("<-- Tasks.TaskDone") }()
 	return a.App.TaskDone(ctx, done)
 }
 
-func (a Application) TaskInprogress(ctx context.Context, inProgress application.TaskInProgress) (err error) {
+func (a Application) TaskInprogress(ctx context.Context, inProgress application.TaskInProgress) (task domain.Task, err error) {
 	a.logger.Info().Msg("--> Tasks.TaskInprogress")
 	defer func() { a.logger.Info().Err(err).Msg("<-- Tasks.TaskInprogress") }()
 	return a.App.TaskInprogress(ctx, inProgress)
