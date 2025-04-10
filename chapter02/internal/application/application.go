@@ -35,6 +35,12 @@ type (
 
 var _ App = (*Application)(nil)
 
+func New(tasks domain.TaskRepository) *Application {
+	return &Application{
+		tasks: tasks,
+	}
+}
+
 func (a Application) AllTaks(ctx context.Context) ([]domain.Task,error) {
 	tasks := make([]model.Task, 0)
 	allTask := make([]domain.Task, 0)
